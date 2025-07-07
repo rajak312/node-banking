@@ -4,8 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsup --onSuccess \"node dist/index.js\"",
-    "build": "tsup src/index.ts --dts --out-dir dist"
+    "setup": "node dist/scripts/setupEnv.js",
+    "dev": "npm run setup && tsup --onSuccess \"node dist/index.js\"",
+    "build": "tsup"
   },  
   "keywords": [],
   "author": "",
