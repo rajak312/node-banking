@@ -1,44 +1,73 @@
+import { Model, DataTypes, Optional } from "sequelize";
 import sequelize from "@config/database.js";
-import { DataTypes } from "sequelize";
 
-export const Customer = sequelize.define("Customer", {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+export interface CustomerAttributes {
+  id: string;
+  firstName: string;
+  lastName: string;
+  dob: Date;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface CustomerCreationAttributes
+  extends Optional<CustomerAttributes, "id" | "createdAt" | "updatedAt"> {}
+
+export class Customer
+  extends Model<CustomerAttributes, CustomerCreationAttributes>
+  implements CustomerAttributes
+{
+  public id!: string;
+  public firstName!: string;
+  public lastName!: string;
+  public dob!: Date;
+  public email!: string;
+  public phoneNumber!: string;
+  public address!: string;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+Customer.init(
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    dob: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
-  firstName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  lastName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  dob: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  phoneNumber: {
-    type: DataTypes.NUMBER,
-    allowNull: false,
-  },
-  address: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
-  },
-});
+  {
+    sequelize,
+    modelName: "Customer",
+    tableName: "customers",
+    timestamps: true,
+  }
+);
